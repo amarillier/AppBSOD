@@ -6,7 +6,7 @@
 *.dylib
 
 test/*
-git.txt
+git.sh
 
 # ALLOWED
 !notify-*
