@@ -4,7 +4,9 @@
 *.dll
 *.so
 *.dylib
+
 test/*
+git.txt
 
 # ALLOWED
 !notify-*
