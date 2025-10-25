@@ -1,0 +1,19 @@
+// fake wintrnl.h for cross-compiling on non-Windows systems
+#ifndef _WINTERNL_H
+#define _WINTERNL_H
+// Function declarations
+int addx(int a, int b);
+int subtractx(int a, int b);
+
+// Macro definition
+#define PIx 3.14159
+
+// Structure definition
+typedef struct Pointx {
+    int x;
+    int y;
+} Pointx;
+
+#endif // WINTRNL_H
+
+// "Now this is not the end. It is not even the beginning of the end. But it is, perhaps, the end of the beginning." Winston Churchill, November 10, 1942

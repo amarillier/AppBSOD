@@ -1,0 +1,20 @@
+// fake windows.h for cross-compiling on non-Windows systems
+#ifndef _WINDOWS_H
+#define _WINDOWS_H
+
+// Function declarations
+int add(int a, int b);
+int subtract(int a, int b);
+
+// Macro definition
+#define PI 3.14159
+
+// Structure definition
+typedef struct Point {
+    int x;
+    int y;
+} Point;
+
+#endif // WINDOWS_H
+
+// "Now this is not the end. It is not even the beginning of the end. But it is, perhaps, the end of the beginning." Winston Churchill, November 10, 1942
