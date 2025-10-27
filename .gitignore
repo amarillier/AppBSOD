@@ -8,10 +8,6 @@
 test/*
 git.sh
 
-# ALLOWED
-!notify-*
-!notify.exe
-
 # Test binary, built with `go test -c`
 *.test
 

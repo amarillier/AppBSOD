@@ -1,5 +1,5 @@
 #!/bin/bash
-# Sync BusinessAppBSOD to Windows via mounted share and auto-compile C version
+# Sync AppBSOD to Windows via mounted share and auto-compile C version
 
 set -e  # Exit on error
 
@@ -18,7 +18,7 @@ then
 fi
 
 # Configuration - ADJUST THESE PATHS
-WINDOWS_SHARE="$HOME/AllanMWin/Allan/Source/go/BusinessAppBSOD"  # Mounted Windows share path
+WINDOWS_SHARE="$HOME/AllanMWin/Allan/Source/go/AppBSOD"  # Mounted Windows share path
 WINDOWS_HOST="192.168.1.9"  # Your Windows machine IP (for PowerShell remoting)
 WINDOWS_USER="allan"   # Windows username
 
@@ -34,7 +34,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 if [ "$SYNC_BACK_ONLY" = false ]; then
-    echo -e "${BLUE}=== Syncing BusinessAppBSOD to Windows ===${NC}"
+    echo -e "${BLUE}=== Syncing AppBSOD to Windows ===${NC}"
 
     # Check if Windows share is mounted
     if [ ! -d "$WINDOWS_SHARE" ]; then
@@ -71,7 +71,7 @@ if [ "$SYNC_BACK_ONLY" = false ]; then
     echo ""
     echo "1. Go to your Windows machine"
     echo "2. Open PowerShell"
-    echo "3. Navigate to: C:\\Allan\\Source\\go\\BusinessAppBSOD"
+    echo "3. Navigate to: C:\\Allan\\Source\\go\\AppBSOD"
     echo ""
     echo "For Go version:"
     echo "  .\\compile_go.ps1"
@@ -174,7 +174,7 @@ echo -e "${BLUE}=== Checking for compiled binaries ===${NC}"
 
 # Check for Go BSOD executable
 if [ -f "./bin/${APP_NAME}.exe" ]; then
-    echo -e "${GREEN}✓ Go BusinessAppBSOD executable found: ./bin/${APP_NAME}.exe${NC}"
+    echo -e "${GREEN}✓ Go AppBSOD executable found: ./bin/${APP_NAME}.exe${NC}"
     ls -lh ./bin/${APP_NAME}.exe
     echo ""
     echo "Go-based BSOD testing:"
@@ -184,13 +184,13 @@ if [ -f "./bin/${APP_NAME}.exe" ]; then
     echo "  .\\bin\\${APP_NAME}.exe 0xDEADBEEF"
     echo ""
 else
-    echo -e "${YELLOW}⚠ Go BusinessAppBSOD executable not found${NC}"
+    echo -e "${YELLOW}⚠ Go AppBSOD executable not found${NC}"
     echo "This means Go compilation failed or wasn't completed on Windows."
 fi
 
 # Check for C BSOD executable
 if [ -f "./bin/${C_APP_NAME}.exe" ]; then
-    echo -e "${GREEN}✓ C BusinessAppBSOD executable found: ./bin/${C_APP_NAME}.exe${NC}"
+    echo -e "${GREEN}✓ C AppBSOD executable found: ./bin/${C_APP_NAME}.exe${NC}"
     ls -lh ./bin/${C_APP_NAME}.exe
     echo ""
     echo "C-based BSOD testing (recommended for Windows Event Logs):"
@@ -200,13 +200,13 @@ if [ -f "./bin/${C_APP_NAME}.exe" ]; then
     echo "  .\\bin\\${C_APP_NAME}.exe 0xDEADBEEF"
     echo ""
 else
-    echo -e "${YELLOW}⚠ C BusinessAppBSOD executable not found${NC}"
+    echo -e "${YELLOW}⚠ C AppBSOD executable not found${NC}"
     echo "This means C compilation failed or wasn't completed on Windows."
     echo ""
     echo "To fix this:"
     echo "1. Go to Windows machine"
     echo "2. Open PowerShell"
-    echo "3. cd to C:\\Allan\\Source\\go\\BusinessAppBSOD"
+    echo "3. cd to C:\\Allan\\Source\\go\\AppBSOD"
     echo "4. Run: .\\compile_c.ps1"
     echo "5. Run this sync script again"
 fi

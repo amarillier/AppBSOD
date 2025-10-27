@@ -68,7 +68,13 @@ if (!(Test-Path "bin")) {
 }
 
 go build -o bin\BusinessAppBSOD_go.exe main.go
-
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "✓ Go compilation successful: bin\BusinessAppBSOD_go.exe" -ForegroundColor Green
+} else {
+    Write-Host "✗ Go compilation failed" -ForegroundColor Red
+    exit 1
+}
+go build -o bin\BusinessAppBSOD_goX.exe main_enhanced.go
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✓ Go compilation successful: bin\BusinessAppBSOD_go.exe" -ForegroundColor Green
 } else {
