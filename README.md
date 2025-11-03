@@ -2,7 +2,7 @@
 
 A Windows application designed to trigger Blue Screen of Death (BSOD) for testing purposes. This project includes both Go and C implementations to compare event logging behavior.
 
-⚠️ **WARNING**: This application will immediately crash your system! Only use on virtual machines or test systems in controlled environments.
+⚠️ **WARNING**: This application **will** immediately crash your system! Only use on virtual machines or test systems in controlled environments.
 
 ## Project Overview
 
@@ -224,7 +224,7 @@ This script will:
    ```
 
 ### Go vs C Differences
-- **Go version**: May not create event logs due to Go language runtime protections (interference)
+- **Go version**: May not create event logs due to Go language runtime protections (interference). The GoX version **should** log events
 - **C version**: More reliable for event logging and memory dumps
 - **Recommendation**: Use C version for testing event logging behavior
 
