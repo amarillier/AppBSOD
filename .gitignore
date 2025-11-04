@@ -28,6 +28,8 @@ go.work
 ## Build artifacts
 dist/
 build/
+sync2windows.sh
+sync.sh
 
 # Update checker data
 latestcheck.json
