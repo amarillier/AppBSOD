@@ -67,16 +67,25 @@ if (!(Test-Path "bin")) {
     Remove-Item -Path "./bin/BusinessAppBSOD_go.exe" -Force
 }
 
-go build -o bin\BusinessAppBSOD_go.exe main.go
+go build -ldflags="-w -s" -trimpath -o bin\BusinessAppBSOD_go.exe main.go
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✓ Go compilation successful: bin\BusinessAppBSOD_go.exe" -ForegroundColor Green
 } else {
     Write-Host "✗ Go compilation failed" -ForegroundColor Red
     exit 1
 }
-go build -o bin\BusinessAppBSOD_goX.exe main_enhanced.go
+go build -ldflags="-w -s" -trimpath -o bin\BusinessAppBSOD_goX.exe main_enhanced.go
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✓ Go compilation successful: bin\BusinessAppBSOD_go.exe" -ForegroundColor Green
+} else {
+    Write-Host "✗ Go compilation failed" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "`THIRD:Compiling Go version of crash dump analyzer..." -ForegroundColor Green
+go build -ldflags="-w -s" -trimpath -o bin\CrashDumpAnalyzer.exe crash_dump_analyzer.go
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "✓ Go compilation successful: bin\CrashDumpAnalyzer.exe" -ForegroundColor Green
 } else {
     Write-Host "✗ Go compilation failed" -ForegroundColor Red
     exit 1

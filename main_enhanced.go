@@ -37,6 +37,28 @@ const (
 	STATUS_ASSERTION_FAILURE = C.NTSTATUS(-1073741024) // 0xC0000420
 )
 
+// Bug check code to string mapping (common codes)
+var bugCheckStrings = map[uint32]string{
+	0x0000000A: "IRQL_NOT_LESS_OR_EQUAL",
+	0x0000001E: "KMODE_EXCEPTION_NOT_HANDLED",
+	0x0000003B: "SYSTEM_SERVICE_EXCEPTION",
+	0x0000007E: "SYSTEM_THREAD_EXCEPTION_NOT_HANDLED",
+	0x0000007F: "UNEXPECTED_KERNEL_MODE_TRAP",
+	0x000000D1: "DRIVER_IRQL_NOT_LESS_OR_EQUAL",
+	0x000000EA: "THREAD_STUCK_IN_DEVICE_DRIVER",
+	0xC0000022: "STATUS_ACCESS_DENIED",
+	0xC0000420: "STATUS_ASSERTION_FAILURE",
+	0xC0000005: "STATUS_ACCESS_VIOLATION",
+}
+
+// Function to get bug check string from code
+func getBugCheckString(ntstatus uint32) string {
+	if str, ok := bugCheckStrings[ntstatus]; ok {
+		return str
+	}
+	return fmt.Sprintf("UNKNOWN_0x%08X", ntstatus)
+}
+
 func parseNTStatus(arg string) (C.NTSTATUS, error) {
 	switch strings.ToLower(arg) {
 	case "access_denied":
@@ -65,11 +87,11 @@ func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("BusinessAppBSOD Enhanced - Trigger a Blue Screen of Death (BSOD) on Windows")
 		fmt.Println("Warning: This will crash your system immediately after providing a parameter!")
-		fmt.Println("\nUsage: BusinessAppBSOD_goX.exe <access_denied | assertion_failure | 0xC0000005>")
+		fmt.Println("\nUsage: BusinessAppBSOD_goX.exe <access_denied | assertion_failure | 0xC0000005> [--bug-check-string]")
 		fmt.Println("BusinessAppBSOD_goX.exe access_denied")
-		fmt.Println("BusinessAppBSOD_goX.exe assertion_failure")
+		fmt.Println("BusinessAppBSOD_goX.exe assertion_failure --bug-check-string")
 		fmt.Println("BusinessAppBSOD_goX.exe 0xC0000005   # STATUS_ACCESS_VIOLATION")
-		fmt.Println("BusinessAppBSOD_goX.exe 0xDEADBEEF   # Custom code")
+		fmt.Println("BusinessAppBSOD_goX.exe 0xDEADBEEF --bug-check-string   # Custom code with bug check string")
 
 		return
 	}
@@ -80,6 +102,15 @@ func main() {
 		return
 	}
 
+	// Check for --bug-check-string flag
+	includeBugCheckString := false
+	for _, arg := range os.Args[2:] {
+		if arg == "--bug-check-string" {
+			includeBugCheckString = true
+			break
+		}
+	}
+
 	var enabled C.BOOLEAN
 	var response C.ULONG
 
@@ -88,6 +119,10 @@ func main() {
 
 	// Log event before triggering BSOD
 	eventMessage := fmt.Sprintf("BusinessAppBSOD Enhanced triggering BSOD with NTSTATUS: 0x%x", uint32(ntstatus))
+	if includeBugCheckString {
+		bugCheckStr := getBugCheckString(uint32(ntstatus))
+		eventMessage += fmt.Sprintf(" (Bug Check: %s)", bugCheckStr)
+	}
 	fmt.Println("Logging event:", eventMessage)
 
 	// Force system to flush buffers
@@ -95,6 +130,10 @@ func main() {
 	forceSystemFlush()
 
 	fmt.Printf("Triggering BSOD with NTSTATUS: 0x%x\n", uint32(ntstatus))
+	if includeBugCheckString {
+		bugCheckStr := getBugCheckString(uint32(ntstatus))
+		fmt.Printf("Bug Check String: %s\n", bugCheckStr)
+	}
 
 	// Force Go runtime to flush output
 	os.Stdout.Sync()

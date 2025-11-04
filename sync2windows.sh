@@ -4,7 +4,8 @@
 set -e  # Exit on error
 
 # Check if this is a sync-back operation
-if [ "$1" = "sync-back" ]; then
+if [ "$1" = "sync-back" ] || [ "$1" = "-sync-back" ]
+then
     SYNC_BACK_ONLY=true
 else
     SYNC_BACK_ONLY=false
@@ -33,11 +34,13 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-if [ "$SYNC_BACK_ONLY" = false ]; then
+if [ "$SYNC_BACK_ONLY" = false ]
+then
     echo -e "${BLUE}=== Syncing AppBSOD to Windows ===${NC}"
 
     # Check if Windows share is mounted
-    if [ ! -d "$WINDOWS_SHARE" ]; then
+    if [ ! -d "$WINDOWS_SHARE" ]
+    then
         echo "ERROR: Windows share not mounted at: $WINDOWS_SHARE"
         echo "Please mount your Windows share first, or update WINDOWS_SHARE path in this script"
         exit 1
@@ -49,7 +52,8 @@ if [ "$SYNC_BACK_ONLY" = false ]; then
     # Clean up any existing Windows binaries from Windows share for fresh compilation
     echo "Cleaning any existing Windows binaries from Windows share..."
     binDir="$WINDOWS_SHARE/bin"
-    if [ -d "$binDir" ]; then
+    if [ -d "$binDir" ]
+    then
         echo "Removing all files from Windows bin directory..."
         rm -f "$binDir"/* 2>/dev/null || true
     fi
@@ -86,7 +90,8 @@ else
     echo -e "${BLUE}=== Syncing back compiled binaries from Windows ===${NC}"
 fi
 
-if [ "$SYNC_BACK_ONLY" = true ]; then
+if [ "$SYNC_BACK_ONLY" = true ]
+then
     # Sync-back mode: only sync binaries, don't touch source files
     echo -e "${BLUE}=== Syncing back compiled binaries from Windows ===${NC}"
     
@@ -108,12 +113,15 @@ if [ "$SYNC_BACK_ONLY" = true ]; then
     
     # Fallback: explicitly copy Windows binaries if rsync didn't work
     echo "Attempting fallback copy of Windows binaries..."
-    if [ -f "$WINDOWS_SHARE/bin/${APP_NAME}.exe" ]; then
+    if [ -f "$WINDOWS_SHARE/bin/${APP_NAME}.exe" ]
+    then
         echo "Copying ${APP_NAME}.exe..."
         cp "$WINDOWS_SHARE/bin/${APP_NAME}.exe" "./bin/" 2>/dev/null || echo "Failed to copy ${APP_NAME}.exe"
+        cp "$WINDOWS_SHARE/bin/CrashDumpAnalyzer.exe" "./bin/" 2>/dev/null || echo "Failed to copy CrashDumpAnalyzer.exe"
     fi
     
-    if [ -f "$WINDOWS_SHARE/bin/${C_APP_NAME}.exe" ]; then
+    if [ -f "$WINDOWS_SHARE/bin/${C_APP_NAME}.exe" ]
+    then
         echo "Copying ${C_APP_NAME}.exe..."
         cp "$WINDOWS_SHARE/bin/${C_APP_NAME}.exe" "./bin/" 2>/dev/null || echo "Failed to copy ${C_APP_NAME}.exe"
     fi
@@ -143,19 +151,23 @@ else
     mkdir -p "./bin"
 
     # Only sync Windows binaries (.exe files)
-    if [ -f "$WINDOWS_SHARE/bin/${APP_NAME}.exe" ]; then
+    if [ -f "$WINDOWS_SHARE/bin/${APP_NAME}.exe" ]
+    then
         echo "Copying ${APP_NAME}.exe..."
         cp "$WINDOWS_SHARE/bin/${APP_NAME}.exe" "./bin/" 2>/dev/null || echo "Failed to copy ${APP_NAME}.exe"
+        cp "$WINDOWS_SHARE/bin/CrashDumpAnalyzer.exe" "./bin/" 2>/dev/null || echo "Failed to copy CrashDumpAnalyzer.exe"
     fi
     
-    if [ -f "$WINDOWS_SHARE/bin/${C_APP_NAME}.exe" ]; then
+    if [ -f "$WINDOWS_SHARE/bin/${C_APP_NAME}.exe" ]
+    then
         echo "Copying ${C_APP_NAME}.exe..."
         cp "$WINDOWS_SHARE/bin/${C_APP_NAME}.exe" "./bin/" 2>/dev/null || echo "Failed to copy ${C_APP_NAME}.exe"
     fi
     
     # Check for any other Windows binaries that might have been created
     for file in "$WINDOWS_SHARE/bin/"*.exe; do
-        if [ -f "$file" ]; then
+        if [ -f "$file" ]
+        then
             filename=$(basename "$file")
             echo "Copying $filename..."
             cp "$file" "./bin/" 2>/dev/null || echo "Failed to copy $filename"
@@ -173,7 +185,8 @@ echo ""
 echo -e "${BLUE}=== Checking for compiled binaries ===${NC}"
 
 # Check for Go BSOD executable
-if [ -f "./bin/${APP_NAME}.exe" ]; then
+if [ -f "./bin/${APP_NAME}.exe" ]
+then
     echo -e "${GREEN}✓ Go AppBSOD executable found: ./bin/${APP_NAME}.exe${NC}"
     ls -lh ./bin/${APP_NAME}.exe
     echo ""
@@ -189,7 +202,8 @@ else
 fi
 
 # Check for C BSOD executable
-if [ -f "./bin/${C_APP_NAME}.exe" ]; then
+if [ -f "./bin/${C_APP_NAME}.exe" ]
+then
     echo -e "${GREEN}✓ C AppBSOD executable found: ./bin/${C_APP_NAME}.exe${NC}"
     ls -lh ./bin/${C_APP_NAME}.exe
     echo ""
